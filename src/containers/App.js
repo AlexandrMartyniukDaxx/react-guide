@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person';
+import Persons from './../components/Persons/Persons'
 
 class App extends Component {
   state = {
@@ -27,11 +27,7 @@ class App extends Component {
     this.setState({ showPersons: !this.state.showPersons });
   }
 
-  onNameChange(index, event) {
-    const value = event.target.value;
-    const person = this.state.persons[index];
-    person.name = value;
-
+  onNameChange(value, index) {
     const persons = this.state.persons.slice();
     persons[index] = Object.assign({}, persons[index], { name: value });
 
@@ -52,12 +48,7 @@ class App extends Component {
     let persons = null;
 
     if (this.state.showPersons) {
-      persons = <div>
-        {this.state.persons.map((p, ind) =>
-          <Person key={ind} name={p.name} age={p.age}
-            onInputChange={this.onNameChange.bind(this, ind)} />)}
-      </div>;
-
+      persons = <Persons persons={this.state.persons} changed={this.onNameChange.bind(this)} />;
       style.backgroundColor = 'red';
     }
 
@@ -68,6 +59,7 @@ class App extends Component {
         </header>
         <button style={style} onClick={this.togglePersons}>Toggle persons</button>
         {persons}
+        <div className="Person">Hello</div>
       </div>
     );
   }
