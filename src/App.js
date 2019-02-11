@@ -9,11 +9,11 @@ class App extends Component {
       { name: 'Manu', age: 29 },
       { name: 'Mstephanie', age: 26 }
     ],
-    otherVal: 'some value'
+    otherVal: 'some value',
+    showPersons: false
   }
 
   switchNameHandler = (newName) => {
-    console.log('button clicked', this.state);
     this.setState({
       persons: [
         { name: newName, age: 28 },
@@ -23,19 +23,51 @@ class App extends Component {
     });
   }
 
+  togglePersons = () => {
+    this.setState({ showPersons: !this.state.showPersons });
+  }
+
+  onNameChange(index, event) {
+    const value = event.target.value;
+    const person = this.state.persons[index];
+    person.name = value;
+
+    const persons = this.state.persons.slice();
+    persons[index] = Object.assign({}, persons[index], { name: value });
+
+    this.setState({ persons });
+  }
+
   render() {
+
+    const style = {
+      backgroundColor: 'green',
+      color: 'white',
+      font: 'inherit',
+      border: '1px solid blue',
+      padding: '8px',
+      cursor: 'pointer'
+    }
+
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = <div>
+        {this.state.persons.map((p, ind) =>
+          <Person key={ind} name={p.name} age={p.age}
+            onInputChange={this.onNameChange.bind(this, ind)} />)}
+      </div>;
+
+      style.backgroundColor = 'red';
+    }
+
     return (
       <div className="App">
         <header className="App-header">
           Hello world
         </header>
-        <button onClick={this.switchNameHandler.bind(this, 'Maximilian')}>Switch name</button>
-        <Person 
-        name={this.state.persons[0].name} 
-        age={this.state.persons[0].age} 
-        click={this.switchNameHandler.bind(this, 'Max!')}/>
-        <Person name="Manu" age="22">My hobby is racing</Person>
-        <Person name="Stephanie" age="21" />
+        <button style={style} onClick={this.togglePersons}>Toggle persons</button>
+        {persons}
       </div>
     );
   }
