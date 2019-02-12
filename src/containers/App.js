@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Persons from './../components/Persons/Persons'
+import Persons from './../components/Persons/Persons';
+import Cockpit from './../components/Cockpit/Cockpit';
 
 class App extends Component {
   state = {
@@ -34,32 +35,22 @@ class App extends Component {
     this.setState({ persons });
   }
 
+  deletePerson = (ind) => {
+    const persons = [...this.state.persons];
+    persons.splice(ind, 1);
+    this.setState({ persons });
+  }
+
   render() {
-
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    }
-
     let persons = null;
-
     if (this.state.showPersons) {
-      persons = <Persons persons={this.state.persons} changed={this.onNameChange.bind(this)} />;
-      style.backgroundColor = 'red';
+      persons = <Persons persons={this.state.persons} changed={this.onNameChange.bind(this)} click={this.deletePerson} />;
     }
 
     return (
       <div className="App">
-        <header className="App-header">
-          Hello world
-        </header>
-        <button style={style} onClick={this.togglePersons}>Toggle persons</button>
+        <Cockpit persons={this.state.persons} open={this.state.showPersons} click={this.togglePersons.bind(this)} />
         {persons}
-        <div className="Person">Hello</div>
       </div>
     );
   }
